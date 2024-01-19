@@ -113,7 +113,7 @@ paths:
           description: "OK"
           schema:
             $ref: "#/definitions/Tour"
-        401:
+        400:
           schema:
             type: "array"
             items:
@@ -163,7 +163,7 @@ paths:
           description: "OK"
           schema:
             $ref: "#/definitions/Tour"
-        401:
+        400:
           schema:
             type: "array"
             items:
