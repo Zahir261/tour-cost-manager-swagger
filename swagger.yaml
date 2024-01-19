@@ -18,10 +18,6 @@ basePath: "/api"
 tags:
 - name: "Tours"
   description: "All about tour"
-- name: "store"
-  description: "All about tour"
-- name: "user"
-  description: "All about tour"
 schemes:
 - "https"
 - "http"
