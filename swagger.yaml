@@ -14,7 +14,7 @@ info:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 host: "example.tcm.io"
-basePath: "/v1"
+basePath: "/api"
 tags:
 - name: "Tours"
   description: "All about tour"
@@ -26,24 +26,7 @@ schemes:
 - "https"
 - "http"
 paths:
-  /tours:
-    get:
-      tags:
-      - "Tours"
-      summary: "Get all the tours user participated in"
-      description: "Returns list of tours"
-      operationId: "getAllTours"
-      produces:
-      - "application/json"
-      responses:
-        200:
-          description: "OK"
-          schema:
-            type: "array"
-          items:
-            $ref: "#/definitions/Tour"
-      security:
-      - api_key: []
+  /v1/tours:
     post:
       tags:
       - "Tours"
@@ -64,13 +47,52 @@ paths:
       responses:
         200:
           description: "OK"
-        405:
-          description: "Invalid input"
+          schema:
+            $ref: "#/definitions/Tour"
+        400:
+          description: "Authorization Error"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Authorization Error"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Error"
       security:
       - petstore_auth:
         - "write:pets"
         - "read:pets"
-  /tours/{tour_id}:
+    get:
+      tags:
+      - "Tours"
+      summary: "Get all the tours user participated in"
+      description: "Returns list of tours"
+      operationId: "getAllTours"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Tour"
+        400:
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Error"
+      security:
+      - api_key: []
+  /v1/tours/{tour_id}:
     get:
       tags:
       - "Tours"
@@ -91,10 +113,26 @@ paths:
           description: "OK"
           schema:
             $ref: "#/definitions/Tour"
-        400:
-          description: "Invalid ID supplied"
+        401:
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Error"
         404:
-          description: "Tour not found"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Error"
       security:
       - api_key: []
     patch:
@@ -123,12 +161,28 @@ paths:
       responses:
         200:
           description: "OK"
-        400:
-          description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/Tour"
+        401:
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Error"
         404:
-          description: "Pet not found"
-        405:
-          description: "Validation exception"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Error"
       security:
       - petstore_auth:
         - "write:pets"
@@ -503,6 +557,22 @@ definitions:
         - "open"
         - "closed"
         - "canceled"
+  Error:
+    type: "object"
+    required:
+    - "code"
+    - "source"
+    - "message"
+    properties:
+      code:
+        type: "string"
+        example: "RESOURCE_NOT_FOUND"
+      source:
+        type: "string"
+        example: "tour_id"
+      message:
+        type: "string"
+        example: "Resource is not available"
 
   Tag:
     type: "object"
